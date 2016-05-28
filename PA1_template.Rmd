@@ -12,37 +12,39 @@ output:
 if(!file.exists("activity.csv"))
   unzip("activity.zip")
 #read the .csv file and store the data in activity_data variable
-activity_data <- read.csv("activ
+activity_data <- read.csv("activity.csv")
 ```
 
 
 ## What is mean total number of steps taken per day?
-```{r mean_total_steps, echo=TRUE}
+```{r histogram_total_steps, echo=TRUE}
 # 1.Calculate the total number of steps taken per day
 # Use function "aggregate" to total the steps for each date
 Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum, 
                                   na.action = na.omit)
 # 2.Make a histogram of the total number of steps taken each day
 # for x-axis tick marks from 0 to 26000 at intervals of 2000
-x-axis_ticks <- seq(from = 0, to = 26000, by = 2000)
+x_axis_ticks <- seq(from = 0, to = 26000, by = 2000)
 hist(Datewise_Total_Steps$steps,
      main="Histogram - Total Steps", col="gray", border="blue",
      ylim = c(0,35), xaxt = "n", xlab="")
 # create x-axis using "at" for the tick marks, labels vertical
-axis(side=1, at=x-axis_ticks, las=2, hadj = 0.9)
+axis(side=1, at=x_axis_ticks, las=2, hadj = 0.9)
 # create the x-axis label
 mtext(text="Total Steps Per Day", side=1, line=4)
+```
 
+```{r mean_total_steps, echo=FALSE}
 # 3.Calculate and report the mean and median of the total number 
 #   of steps taken per day
 Steps_mean <- mean(Datewise_Total_Steps$steps, na.rm = TRUE)
 Steps_meadian <- median(Datewise_Total_Steps$steps, na.rm = TRUE)
-print(paste("Mean = ", round(Steps_mean) , sep=" "))
-print(paste("Median = " , round(Steps_meadian), sep=" "))
+print(paste("Mean Total Steps / Day   = ", round(Steps_mean) , sep=" "))
+print(paste("Median Total Steps / Day = " , round(Steps_meadian), sep=" "))
 ```
 
 ## What is the average daily activity pattern?
-```{r interval_max_avg_steps, echo=TRUE}
+```{r xy_plot_avg_steps, echo=TRUE}
 # 1.Calculate the average number of steps taken per 5-minute interval,
 #   where the steps taken are averaged across all days
 # Use function "aggregate" to compute this average with steps~interval formula
@@ -70,7 +72,9 @@ axis(side=2, at=y_axis_ticks)
 # create the appropriate axis lables
 mtext(text="5-minute intervals", side=1, line=4)
 mtext(text="Avg No of Steps", side=2, line=3)
+```
 
+```{r max_avg_steps, echo=FALSE}
 # find the 5-minute interval, which contains the maximum number of steps
 max_avg_steps <- max(Avg_Steps_Per_Interval$steps)
 interval_with_max_steps <- Avg_Steps_Per_Interval[

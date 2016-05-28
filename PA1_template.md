@@ -35,11 +35,11 @@ mtext(text="Total Steps Per Day", side=1, line=4)
 
 
 ```
-## [1] "Mean Total Steps/Day   =  10766"
+## [1] "Mean Total Steps / Day   =  10766"
 ```
 
 ```
-## [1] "Median Total Steps/Day =  10765"
+## [1] "Median Total Steps / Day =  10765"
 ```
 
 ## What is the average daily activity pattern?
@@ -74,7 +74,7 @@ mtext(text="5-minute intervals", side=1, line=4)
 mtext(text="Avg No of Steps", side=2, line=3)
 ```
 
-![](PA1_template_files/figure-html/plot_daily_activity-1.png)<!-- -->
+![](PA1_template_files/figure-html/xy_plot_avg_steps-1.png)<!-- -->
 
 
 ```
