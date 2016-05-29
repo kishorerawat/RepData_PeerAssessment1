@@ -55,6 +55,14 @@ Avg_Steps_Per_Interval <- aggregate(steps~interval, activity_data, mean, na.acti
 
 ## Imputing missing values
 
+#### Caculate and show the number of rows which have the <i>stepts</is> data missing
+
+```
+## missing_values
+## FALSE  TRUE 
+## 15264  2304
+```
+
 #### We will replace the NA values in the </i>steps</i> column with the average value of steps taken, 
 
 ```r
@@ -91,3 +99,27 @@ Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum,
 #### We can observe the differences in the original and new values after replacing the missing values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+#### Here, we will compare the data in two sets - Weekends(Saturday, Sunday) and Weekdays (Monday, Tuesday, Wednesday, Thursday, Friday)
+
+
+#### We will add a new column named <i>WeekDay_Weekend</i> to the dataset, which will have this date calculated from the <i>date</i> column,
+
+```r
+date_data <- as.Date(activity_data$date)
+Weekday_Weekend <- sapply(date_data, FUN=weekday_or_weekend)
+# add this new data as a column into the activity_data using cbind function
+activity_data <- cbind(activity_data, Weekday_Weekend)
+```
+
+#### Now, here is the XY-Plot for Weekdays and Weekends, plotted using ggplot with the <i>facet_grid</i> feature
+
+```
+## Warning: package 'ggplot2' was built under R version 3.2.5
+```
+
+![](PA1_template_files/figure-html/weekday_weekend_plot-1.png)<!-- -->
+
+#### We can easily observe from these 2 plots that the average number of steps are higher on Weekdays than on the Weekends.
+
+---------------------------- END of REPORT --------------------------

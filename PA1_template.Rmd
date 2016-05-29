@@ -91,6 +91,12 @@ print(paste("5-minute interval with max steps = ", interval_with_max_steps, sep=
 
 ## Imputing missing values
 
+#### Caculate and show the number of rows which have the <i>stepts</is> data missing
+```{r show_missing_values, echo=FALSE}
+missing_values <- is.na(activity_data$steps)
+table(missing_values)
+```
+
 #### We will replace the NA values in the </i>steps</i> column with the average value of steps taken, 
 ```{r avg_steps_for_NA, echo=TRUE}
 # find the mean of steps column for all rows, round it off
@@ -118,3 +124,41 @@ activity_data[["steps"]][is.na(activity_data[["steps"]])] <- mean_steps
 #### We can observe the differences in the original and new values after replacing the missing values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+#### Here, we will compare the data in two sets - Weekends(Saturday, Sunday) and Weekdays (Monday, Tuesday, Wednesday, Thursday, Friday)
+```{r weekday_weekend_func, echo=FALSE}
+weekday_or_weekend <- function(date) {
+  if(weekdays(date)=="Sunday" || weekdays(date)=="Saturday")
+    "Weekend"
+  else
+    "Weekday"
+}
+```
+
+#### We will add a new column named <i>WeekDay_Weekend</i> to the dataset, which will have this date calculated from the <i>date</i> column,
+```{r add_weekday_weekend_column, echo=TRUE}
+date_data <- as.Date(activity_data$date)
+Weekday_Weekend <- sapply(date_data, FUN=weekday_or_weekend)
+# add this new data as a column into the activity_data using cbind function
+activity_data <- cbind(activity_data, Weekday_Weekend)
+```
+
+#### Now, here is the XY-Plot for Weekdays and Weekends, plotted using ggplot with the <i>facet_grid</i> feature
+```{r weekday_weekend_plot, echo=FALSE}
+# find the average steps taken per 5-minute interval for weekdays and weekends
+avg_weekday_weekend <- aggregate(steps~interval + Weekday_Weekend,
+                                 activity_data, mean)
+# load the ggplot2 library
+library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
+# initiate the ggplot with interval on x-axis and steps on y-axis
+gg <- ggplot(avg_weekday_weekend, aes(interval, steps))
+gg <- gg + geom_line()
+# use the facet_grid feature with the two factors - Weekday and Weekend
+gg <- gg + facet_grid(Weekday_Weekend~.)
+# print the graph
+print(gg)
+```
+
+#### We can easily observe from these 2 plots that the average number of steps are higher on Weekdays than on the Weekends.
+
+---------------------------- END of REPORT --------------------------
