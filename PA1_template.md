@@ -3,7 +3,7 @@
 
 ## Loading and preprocessing the data
 
-#### Extract the .CSV file from the .ZIP file, first checking if they don't already exist
+#### Extract the .CSV file from the .ZIP file, first checking if they don't exist already
 
 ```r
 if(!file.exists("activity.csv"))
@@ -16,16 +16,18 @@ if(!exists("activity_data"))
 
 ## What is mean total number of steps taken per day?
 
-#### Using <i>aggregate</i> function to calculate the total number of steps for each date 
+#### Using <i>aggregate</i> function to calculate the total number of steps for each date
 
 ```r
-Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum, 
+Datewise_Total_Steps <- aggregate(steps~date, 
+                                  activity_data, sum, 
                                   na.action = na.omit)
 ```
+
 #### Now, here is the Histogram showing the total steps taken each day
 ![](PA1_template_files/figure-html/histogram_total_steps-1.png)<!-- -->
 
-#### The mean and median of the total steps taken are, 
+#### The mean and median of the total steps taken per day are, 
 
 ```
 ## [1] "Mean Total Steps / Day   =  10766"
@@ -35,6 +37,7 @@ Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum,
 ## [1] "Median Total Steps / Day =  10765"
 ```
 
+
 ## What is the average daily activity pattern?
 
 #### Calculate the average number of steps taken per 5-minute interval, where the steps taken are averaged across all days.
@@ -42,20 +45,26 @@ Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum,
 #### Using function <i>aggregate</i> to compute this average with <i>steps~interval</i> formula,
 
 ```r
-Avg_Steps_Per_Interval <- aggregate(steps~interval, activity_data, mean, na.action = na.omit)
+Avg_Steps_Per_Interval <- aggregate(steps~interval, 
+                                    activity_data, mean, 
+                                    na.action = na.omit)
 ```
-#### ...and here is the XY-plot showing average number of steps(y-axis) for each 5-minute interval(x-axis)
+
+#### ...and here is the XY-plot showing average number of steps(y-axis) for each 5-minute interval(x-axis)..
 ![](PA1_template_files/figure-html/xy_plot_avg_steps-1.png)<!-- -->
 
-#### In this plot, the 5-minute interval which which has the highest average steps taken is,
+#### In all days, which 5-minute interval has the highest average steps taken?
 
 ```
 ## [1] "5-minute interval with max steps =  835"
 ```
 
+
 ## Imputing missing values
 
-#### Caculate and show the number of rows which have the <i>stepts</is> data missing
+#### Note that there are a number of days/intervals where there are missing values (coded as NA).
+
+#### Caculate and show the number of rows which have the <i>stepts</is> data as NA.
 
 ```
 ## missing_values
@@ -79,11 +88,12 @@ activity_data[["steps"]][is.na(activity_data[["steps"]])] <- mean_steps
 #### Now, after "imputing the missing values", we will recalculate the steps taken for each date,
 
 ```r
-Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum, 
+Datewise_Total_Steps <- aggregate(steps~date, 
+                                  activity_data, sum, 
                                   na.action = na.omit)
 ```
 
-#### ...and here is the new histogram after imputing the missing values,
+#### ...and here is the new histogram after imputing the missing values...
 ![](PA1_template_files/figure-html/histogram_total_steps_new-1.png)<!-- -->
 
 #### The new mean and median of the total steps taken are,
@@ -98,12 +108,21 @@ Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum,
 
 #### We can observe the differences in the original and new values after replacing the missing values.
 
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 #### Here, we will compare the data in two sets - Weekends(Saturday, Sunday) and Weekdays (Monday, Tuesday, Wednesday, Thursday, Friday)
 
+```r
+weekday_or_weekend <- function(date) {
+  if(weekdays(date)=="Sunday" || weekdays(date)=="Saturday")
+    "Weekend"
+  else
+    "Weekday"
+}
+```
 
-#### We will add a new column named <i>WeekDay_Weekend</i> to the dataset, which will have this date calculated from the <i>date</i> column,
+#### We will add a new column named <i>WeekDay_Weekend</i> to the dataset, which will have this infromation computed using the <i>weekdays</i> function,
 
 ```r
 date_data <- as.Date(activity_data$date)
@@ -122,4 +141,4 @@ activity_data <- cbind(activity_data, Weekday_Weekend)
 
 #### We can easily observe from these 2 plots that the average number of steps are higher on Weekdays than on the Weekends.
 
----------------------------- END of REPORT --------------------------
+#### ******************* END OF REPORT *******************

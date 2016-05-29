@@ -8,7 +8,7 @@ output:
 
 ## Loading and preprocessing the data
 
-#### Extract the .CSV file from the .ZIP file, first checking if they don't already exist
+#### Extract the .CSV file from the .ZIP file, first checking if they don't exist already
 ```{r load_data, echo=TRUE}
 if(!file.exists("activity.csv"))
   unzip("activity.zip")
@@ -20,26 +20,27 @@ if(!exists("activity_data"))
 
 ## What is mean total number of steps taken per day?
 
-#### Using <i>aggregate</i> function to calculate the total number of steps for each date 
+#### Using <i>aggregate</i> function to calculate the total number of steps for each date
 ```{r calc_total_steps, echo=TRUE}
-Datewise_Total_Steps <- aggregate(steps~date, activity_data, sum, 
+Datewise_Total_Steps <- aggregate(steps~date, 
+                                  activity_data, sum, 
                                   na.action = na.omit)
 ```
+
 #### Now, here is the Histogram showing the total steps taken each day
 ```{r histogram_total_steps, echo=FALSE}
-# 2.Make a histogram of the total number of steps taken each day
 # for x-axis tick marks from 0 to 26000 at intervals of 2000
 x_axis_ticks <- seq(from = 0, to = 26000, by = 2000)
 hist(Datewise_Total_Steps$steps,
      main="Histogram - Total Steps", col="gray", border="blue",
      ylim = c(0,35), xaxt = "n", xlab="")
-# create x-axis using "at" for the tick marks, labels vertical
+# create x-axis using x_axis_ticks for the tick marks, showing the labels vertically
 axis(side=1, at=x_axis_ticks, las=2, hadj = 0.9)
 # create the x-axis label
 mtext(text="Total Steps Per Day", side=1, line=4)
 ```
 
-#### The mean and median of the total steps taken are, 
+#### The mean and median of the total steps taken per day are, 
 ```{r mean_total_steps, echo=FALSE}
 Steps_mean <- mean(Datewise_Total_Steps$steps, na.rm = TRUE)
 Steps_meadian <- median(Datewise_Total_Steps$steps, na.rm = TRUE)
@@ -47,17 +48,20 @@ print(paste("Mean Total Steps / Day   = ", round(Steps_mean) , sep=" "))
 print(paste("Median Total Steps / Day = " , round(Steps_meadian), sep=" "))
 ```
 
+
 ## What is the average daily activity pattern?
 
 #### Calculate the average number of steps taken per 5-minute interval, where the steps taken are averaged across all days.
 
 #### Using function <i>aggregate</i> to compute this average with <i>steps~interval</i> formula,
 ```{r calc_avg_steps, echo=TRUE}
-Avg_Steps_Per_Interval <- aggregate(steps~interval, activity_data, mean, na.action = na.omit)
+Avg_Steps_Per_Interval <- aggregate(steps~interval, 
+                                    activity_data, mean, 
+                                    na.action = na.omit)
 ```
-#### ...and here is the XY-plot showing average number of steps(y-axis) for each 5-minute interval(x-axis)
+
+#### ...and here is the XY-plot showing average number of steps(y-axis) for each 5-minute interval(x-axis)..
 ```{r xy_plot_avg_steps, echo=FALSE}
-# 2.Make a histogram of the total number of steps taken each day
 # x-axis tick marks from 0 to 2400 (higher than max 5-minuter interval value),
 # with each interval of 200 points
 x_axis_ticks <- seq(from = 0, to = 2400, by = 200)
@@ -81,7 +85,7 @@ mtext(text="5-minute intervals", side=1, line=4)
 mtext(text="Avg No of Steps", side=2, line=3)
 ```
 
-#### In this plot, the 5-minute interval which which has the highest average steps taken is,
+#### In all days, which 5-minute interval has the highest average steps taken?
 ```{r max_avg_steps, echo=FALSE}
 max_avg_steps <- max(Avg_Steps_Per_Interval$steps)
 interval_with_max_steps <- Avg_Steps_Per_Interval[
@@ -89,9 +93,12 @@ interval_with_max_steps <- Avg_Steps_Per_Interval[
 print(paste("5-minute interval with max steps = ", interval_with_max_steps, sep=" "))
 ```
 
+
 ## Imputing missing values
 
-#### Caculate and show the number of rows which have the <i>stepts</is> data missing
+#### Note that there are a number of days/intervals where there are missing values (coded as NA).
+
+#### Caculate and show the number of rows which have the <i>stepts</is> data as NA.
 ```{r show_missing_values, echo=FALSE}
 missing_values <- is.na(activity_data$steps)
 table(missing_values)
@@ -113,7 +120,7 @@ activity_data[["steps"]][is.na(activity_data[["steps"]])] <- mean_steps
 ```{r calc_total_steps_new, ref.label="calc_total_steps", echo=TRUE}
 ```
 
-#### ...and here is the new histogram after imputing the missing values,
+#### ...and here is the new histogram after imputing the missing values...
 ```{r histogram_total_steps_new, ref.label="histogram_total_steps", echo=FALSE}
 ```
 
@@ -123,10 +130,11 @@ activity_data[["steps"]][is.na(activity_data[["steps"]])] <- mean_steps
 
 #### We can observe the differences in the original and new values after replacing the missing values.
 
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 #### Here, we will compare the data in two sets - Weekends(Saturday, Sunday) and Weekdays (Monday, Tuesday, Wednesday, Thursday, Friday)
-```{r weekday_weekend_func, echo=FALSE}
+```{r weekday_weekend_func, echo=TRUE}
 weekday_or_weekend <- function(date) {
   if(weekdays(date)=="Sunday" || weekdays(date)=="Saturday")
     "Weekend"
@@ -135,7 +143,7 @@ weekday_or_weekend <- function(date) {
 }
 ```
 
-#### We will add a new column named <i>WeekDay_Weekend</i> to the dataset, which will have this date calculated from the <i>date</i> column,
+#### We will add a new column named <i>WeekDay_Weekend</i> to the dataset, which will have this infromation computed using the <i>weekdays</i> function,
 ```{r add_weekday_weekend_column, echo=TRUE}
 date_data <- as.Date(activity_data$date)
 Weekday_Weekend <- sapply(date_data, FUN=weekday_or_weekend)
@@ -161,4 +169,4 @@ print(gg)
 
 #### We can easily observe from these 2 plots that the average number of steps are higher on Weekdays than on the Weekends.
 
----------------------------- END of REPORT --------------------------
+#### ******************* END OF REPORT *******************
