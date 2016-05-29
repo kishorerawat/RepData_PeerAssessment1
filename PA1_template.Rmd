@@ -28,7 +28,7 @@ Datewise_Total_Steps <- aggregate(steps~date,
 ```
 
 #### Now, here is the Histogram showing the total steps taken each day
-```{r histogram_total_steps, echo=FALSE}
+```{r histogram_total_steps, echo=TRUE}
 # for x-axis tick marks from 0 to 26000 at intervals of 2000
 x_axis_ticks <- seq(from = 0, to = 26000, by = 2000)
 hist(Datewise_Total_Steps$steps,
@@ -41,7 +41,7 @@ mtext(text="Total Steps Per Day", side=1, line=4)
 ```
 
 #### The mean and median of the total steps taken per day are, 
-```{r mean_total_steps, echo=FALSE}
+```{r mean_total_steps, echo=TRUE}
 Steps_mean <- mean(Datewise_Total_Steps$steps, na.rm = TRUE)
 Steps_meadian <- median(Datewise_Total_Steps$steps, na.rm = TRUE)
 print(paste("Mean Total Steps / Day   = ", round(Steps_mean) , sep=" "))
@@ -61,7 +61,7 @@ Avg_Steps_Per_Interval <- aggregate(steps~interval,
 ```
 
 #### ...and here is the XY-plot showing average number of steps(y-axis) for each 5-minute interval(x-axis)..
-```{r xy_plot_avg_steps, echo=FALSE}
+```{r xy_plot_avg_steps, echo=TRUE}
 # x-axis tick marks from 0 to 2400 (higher than max 5-minuter interval value),
 # with each interval of 200 points
 x_axis_ticks <- seq(from = 0, to = 2400, by = 200)
@@ -86,7 +86,7 @@ mtext(text="Avg No of Steps", side=2, line=3)
 ```
 
 #### In all days, which 5-minute interval has the highest average steps taken?
-```{r max_avg_steps, echo=FALSE}
+```{r max_avg_steps, echo=TRUE}
 max_avg_steps <- max(Avg_Steps_Per_Interval$steps)
 interval_with_max_steps <- Avg_Steps_Per_Interval[
                             Avg_Steps_Per_Interval$steps == max_avg_steps,1]
@@ -99,7 +99,7 @@ print(paste("5-minute interval with max steps = ", interval_with_max_steps, sep=
 #### Note that there are a number of days/intervals where there are missing values (coded as NA).
 
 #### Caculate and show the number of rows which have the <i>stepts</is> data as NA.
-```{r show_missing_values, echo=FALSE}
+```{r show_missing_values, echo=TRUE}
 missing_values <- is.na(activity_data$steps)
 table(missing_values)
 ```
@@ -121,11 +121,11 @@ activity_data[["steps"]][is.na(activity_data[["steps"]])] <- mean_steps
 ```
 
 #### ...and here is the new histogram after imputing the missing values...
-```{r histogram_total_steps_new, ref.label="histogram_total_steps", echo=FALSE}
+```{r histogram_total_steps_new, ref.label="histogram_total_steps", echo=TRUE}
 ```
 
 #### The new mean and median of the total steps taken are,
-```{r mean_total_steps_new, ref.label="mean_total_steps", echo=FALSE}
+```{r mean_total_steps_new, ref.label="mean_total_steps", echo=TRUE}
 ```
 
 #### We can observe the differences in the original and new values after replacing the missing values.
@@ -152,7 +152,7 @@ activity_data <- cbind(activity_data, Weekday_Weekend)
 ```
 
 #### Now, here is the XY-Plot for Weekdays and Weekends, plotted using ggplot with the <i>facet_grid</i> feature
-```{r weekday_weekend_plot, echo=FALSE}
+```{r weekday_weekend_plot, echo=TRUE}
 # find the average steps taken per 5-minute interval for weekdays and weekends
 avg_weekday_weekend <- aggregate(steps~interval + Weekday_Weekend,
                                  activity_data, mean)
